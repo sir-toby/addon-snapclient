@@ -10,18 +10,6 @@
 ![Supports amd64 Architecture][amd64-shield]
 ![Supports i386 Architecture][i386-shield]
 
-## Notes
-
-For gathering the oauth credentials file, use this: https://github.com/dspearson/librespot-auth
-
-And when configuring the addon, make sure you put the credentials between single quotes `'`
-
-e.g.
-```
-credentials: '{"username":"...","auth_type":1,"auth_data":"..."}'
-```
-
-If you've enabled the librespot cache, make sure to exclude this addon from bacukps, as I haven't yet found a solution not to backup the cache dir.
 
 ## Contributing
 
@@ -60,8 +48,5 @@ SOFTWARE.
 [armhf-shield]: https://img.shields.io/badge/armhf-no-red.svg
 [armv7-shield]: https://img.shields.io/badge/armv7-yes-green.svg
 [i386-shield]: https://img.shields.io/badge/i386-yes-green.svg
-[license-shield]: https://img.shields.io/github/license/rwjack/addon-snapserver-spotify.svg
 [maintenance-shield]: https://img.shields.io/maintenance/yes/2022.svg
 [project-stage-shield]: https://img.shields.io/badge/project%20stage-experimental-yellow.svg
-[releases-shield]: https://img.shields.io/github/v/release/rwjack/addon-snapserver-spotify.svg
-[releases]: https://github.com/rwjack/addon-snapserver-spotify/releases
