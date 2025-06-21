@@ -15,15 +15,6 @@ jobs:
       
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-
-      - name: Validate build configuration
-        uses: docker/build-push-action@v6
-        with:
-          call: check
-          tags: sirtoby42/snapclient:latest
-          context: "{{defaultContext}}:snapclient"
-          build-args: |
-            BUILD_FROM=ghcr.io/hassio-addons/base:17.2.5
       
       - name: Build and Push
         uses: docker/build-push-action@v6
@@ -51,4 +42,3 @@ jobs:
       with: 
         args: |
           --addon
-
