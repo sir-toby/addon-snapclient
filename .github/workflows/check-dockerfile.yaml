@@ -21,5 +21,4 @@ jobs:
         with:
           call: check
           tags: sirtoby42/snapclient:latest
-          file: ./snapclient/Dockerfile
           context: "{{defaultContext}}:snapclient"
