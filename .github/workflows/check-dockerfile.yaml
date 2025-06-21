@@ -24,6 +24,16 @@ jobs:
           context: "{{defaultContext}}:snapclient"
           build-args: |
             BUILD_FROM=ghcr.io/hassio-addons/base:17.2.5
+      
+      - name: Build and Push
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: sirtoby42/snapclient:latest
+          context: "{{defaultContext}}:snapclient"
+          build-args: |
+            BUILD_FROM=ghcr.io/hassio-addons/base:17.2.5
+        
   homeassistant:
     runs-on: ubuntu-latest
     steps:
@@ -40,6 +50,5 @@ jobs:
       uses: home-assistant/builder@2025.03.0
       with: 
         args: |
-          BUILD_FROM=ghcr.io/hassio-addons/base:17.2.5 \
           --addon
 
