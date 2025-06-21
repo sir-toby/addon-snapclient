@@ -1,21 +1,28 @@
-name: Build Dockerfile
+name: ci
 
 on:
   push:
-    paths:
-      - 'Dockerfile'
-      - '.github/workflows/check-dockerfile.yaml'
-  pull_request:
-    paths:
-      - 'Dockerfile'
-      - '.github/workflows/check-dockerfile.yaml'
 
 jobs:
-  build:
+  docker:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-      - name: Build Docker image
-        run: docker build -t test-image ./snapclient/
+      - name: Validate build configuration
+        uses: docker/build-push-action@v6
+        with:
+          call: check
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: sirtoby42/snapclient:latest
