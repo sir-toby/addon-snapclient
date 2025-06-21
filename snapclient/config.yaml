@@ -1,6 +1,6 @@
 ---
 name: Snapcast Client
-version: 2024.10.1
+version: 2025.06.1
 slug: snapcast-client
 description: Provides a Snapcast client on your home assistant machine
 url: https://github.com/sir-toby/addon-snapclient
@@ -16,6 +16,8 @@ arch:
 options:
   host: "127.0.0.1"
   port: 1704
+  clientname: "name"
 schema:
   host: str
   port: int
+  clientname: str

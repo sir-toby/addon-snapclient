@@ -2,7 +2,7 @@ ARG BUILD_FROM
 FROM $BUILD_FROM
 
 # Add env
-ENV LANG C.UTF-8
+ENV LANG=C.UTF-8
 
 # Set shell
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -13,7 +13,7 @@ RUN \
     && rm -fr \
         /tmp/*
 
-RUN apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community/ snapcast-client=0.29.0-r0
+RUN apk add --no-cache --repository=https://dl-cdn.alpinelinux.org/v3.21/community/ snapcast-client=0.29.0-r0
 
 
 # Copy data for add-on
