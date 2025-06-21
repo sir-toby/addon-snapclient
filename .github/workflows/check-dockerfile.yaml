@@ -1,0 +1,21 @@
+name: Build Dockerfile
+
+on:
+  push:
+    paths:
+      - 'Dockerfile'
+      - '.github/workflows/check-dockerfile.yaml'
+  pull_request:
+    paths:
+      - 'Dockerfile'
+      - '.github/workflows/check-dockerfile.yaml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t test-image .
