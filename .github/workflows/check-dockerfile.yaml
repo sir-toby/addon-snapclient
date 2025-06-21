@@ -3,11 +3,11 @@ name: Build Dockerfile
 on:
   push:
     paths:
-      - 'Dockerfile'
+      - 'snapclient/Dockerfile'
       - '.github/workflows/check-dockerfile.yaml'
   pull_request:
     paths:
-      - 'Dockerfile'
+      - 'snapclient/Dockerfile'
       - '.github/workflows/check-dockerfile.yaml'
 
 jobs:
