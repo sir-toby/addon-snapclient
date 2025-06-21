@@ -22,8 +22,24 @@ jobs:
           call: check
           tags: sirtoby42/snapclient:latest
           context: "{{defaultContext}}:snapclient"
-          build_from: ghcr.io/hassio-addons/base:17.2.5 
-        
+          build-args: 
+            BUILT_FROM: ghcr.io/hassio-addons/base:17.2.5 
+  homeassistant:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+    
       - name: Check with homeassistant
         uses: home-assistant/builder@2025.03.0
+        with: 
+          args: |
+            --build-arg BUILD_FROM=ghcr.io/hassio-addons/base:17.2.5 \
+            --addon
 
