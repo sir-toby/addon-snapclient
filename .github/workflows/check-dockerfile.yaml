@@ -22,8 +22,8 @@ jobs:
           call: check
           tags: sirtoby42/snapclient:latest
           context: "{{defaultContext}}:snapclient"
-          build-args: 
-            BUILT_FROM: ghcr.io/hassio-addons/base:17.2.5 
+          build-args: |
+            BUILD_FROM=ghcr.io/hassio-addons/base:latest
   homeassistant:
     runs-on: ubuntu-latest
     steps:
