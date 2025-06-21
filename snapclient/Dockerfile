@@ -13,7 +13,7 @@ RUN \
     && rm -fr \
         /tmp/*
 
-RUN apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community/ snapcast-client=0.29.0-r0
+RUN apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community/ snapcast-client=0.30.0-r0
 
 
 # Copy data for add-on
