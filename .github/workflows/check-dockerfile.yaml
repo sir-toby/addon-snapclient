@@ -26,4 +26,5 @@ jobs:
         with:
           push: true
           tags: sirtoby42/snapclient:latest
-          file: snapclient/Dockerfile
+          file: ./snapclient/Dockerfile
+          context: ./snapclient
