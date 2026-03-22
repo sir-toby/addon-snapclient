@@ -56,7 +56,7 @@ jobs:
             echo "Version $VERSION not found."
             
             # Additional pre-check to gracefully exit if Alpine Edge doesn't have the version yet
-            ALPINE_PKG=$(curl -s "https://dl-cdn.alpinelinux.org/alpine/edge/community/armhf/" | grep -oE "snapcast-client-${VERSION}-r[0-9]+" || echo "not-found")
+            ALPINE_PKG=$(curl -s "https://dl-cdn.alpinelinux.org/alpine/edge/community/armv7/" | grep -oE "snapcast-client-${VERSION}-r[0-9]+" || echo "not-found")
             if [ "$ALPINE_PKG" == "not-found" ]; then
                 echo "Warning: Alpine edge repository does not have the snapcast-client package for version ${VERSION} yet."
                 echo "Waiting for Alpine maintainers to publish it. Stopping gracefully."
@@ -110,3 +110,4 @@ jobs:
           build-args: |
             BUILD_FROM=ghcr.io/hassio-addons/base:stable
             SNAPCAST_VERSION=${{ steps.get_version.outputs.version }}
+        platforms: linux/armv7
