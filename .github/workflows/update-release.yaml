@@ -87,6 +87,10 @@ jobs:
           commit_message: "Bump add-on version to ${{ steps.get_version.outputs.version }}"
           file_pattern: "snapclient/config.yaml CHANGELOG.md"
 
+      - name: Set up QEMU
+        if: steps.check_published.outputs.exists == 'false'
+        uses: docker/setup-qemu-action@v3
+
       - name: Set up Docker Buildx
         if: steps.check_published.outputs.exists == 'false'
         uses: docker/setup-buildx-action@v3
@@ -110,4 +114,4 @@ jobs:
           build-args: |
             BUILD_FROM=ghcr.io/hassio-addons/base:stable
             SNAPCAST_VERSION=${{ steps.get_version.outputs.version }}
-          platforms: linux/armv7
+          platforms: linux/arm/v7
