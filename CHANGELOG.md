@@ -1,5 +1,10 @@
 #Changelog
 
+##2026.03.22
+- Upgrade version
+- Add Github Action to automatically check for latest version, build new image and push it to dockerhub
+- changed version scheme to match upstream snapclient version
+
 ##2025.06.2
 - Fix error with specifying hostname
 

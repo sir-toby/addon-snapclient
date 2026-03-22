@@ -1,6 +1,8 @@
 ARG BUILD_FROM
 FROM $BUILD_FROM
 
+ARG SNAPCAST_VERSION
+
 # Add env
 ENV LANG=C.UTF-8
 
@@ -9,11 +11,10 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN \
     apk add --no-cache \
-        alsa-plugins-pulse bash \
+    alsa-plugins-pulse bash \
+    --repository=https://dl-cdn.alpinelinux.org/package/edge/community/ "snapcast-client~=${SNAPCAST_VERSION}" \
     && rm -fr \
-        /tmp/*
-
-RUN apk add --no-cache --repository=https://dl-cdn.alpinelinux.org/v3.21/community/ snapcast-client=0.29.0-r0
+    /tmp/*
 
 
 # Copy data for add-on
