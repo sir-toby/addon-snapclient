@@ -1,6 +1,6 @@
 ---
 name: Snapcast Client
-version: 0.29.0
+version: 0.35.0
 slug: snapcast-client
 description: Provides a Snapcast client on your home assistant machine
 url: https://github.com/sir-toby/addon-snapclient
