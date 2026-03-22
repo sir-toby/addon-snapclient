@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: '0 0 * * *' # Check daily at midnight
   workflow_dispatch: # Allow manual triggering
+    inputs:
+      version:
+        description: 'Specific Snapcast version to build (e.g. 0.28.0). Leave empty to automatically fetch latest.'
+        required: false
+        type: string
 
 jobs:
   check-and-build:
@@ -14,19 +19,29 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Get latest Snapcast release version
+      - name: Get target Snapcast release version
         id: get_version
         run: |
-          LATEST_TAG=$(curl -sL https://api.github.com/repos/badaix/snapcast/releases/latest | jq -r .tag_name)
-          if [ -z "$LATEST_TAG" ] || [ "$LATEST_TAG" == "null" ]; then
-            echo "Failed to get the latest release tag"
-            exit 1
-          fi
+          MANUAL_VERSION="${{ github.event.inputs.version }}"
           
-          # Remove 'v' prefix using parameter expansion, e.g. v0.27.0 -> 0.27.0
-          VERSION=${LATEST_TAG#v}
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "Latest release found: $VERSION"
+          if [ -n "$MANUAL_VERSION" ]; then
+            # Use the manually provided version, stripping 'v' if accidentally included
+            VERSION=${MANUAL_VERSION#v}
+            echo "Manual version specified: $VERSION"
+            echo "version=$VERSION" >> $GITHUB_OUTPUT
+          else
+            # Fetch latest dynamically
+            LATEST_TAG=$(curl -sL https://api.github.com/repos/badaix/snapcast/releases/latest | jq -r .tag_name)
+            if [ -z "$LATEST_TAG" ] || [ "$LATEST_TAG" == "null" ]; then
+              echo "Failed to get the latest release tag"
+              exit 1
+            fi
+            
+            # Remove 'v' prefix using parameter expansion, e.g. v0.27.0 -> 0.27.0
+            VERSION=${LATEST_TAG#v}
+            echo "version=$VERSION" >> $GITHUB_OUTPUT
+            echo "Latest release found: $VERSION"
+          fi
 
       - name: Check if version already published
         id: check_published
@@ -41,7 +56,7 @@ jobs:
             echo "Version $VERSION not found."
             
             # Additional pre-check to gracefully exit if Alpine Edge doesn't have the version yet
-            ALPINE_PKG=$(curl -s "https://dl-cdn.alpinelinux.org/alpine/edge/community/x86_64/" | grep -oE "snapcast-client-${VERSION}-r[0-9]+" || echo "not-found")
+            ALPINE_PKG=$(curl -s "https://dl-cdn.alpinelinux.org/alpine/edge/community/armhf/" | grep -oE "snapcast-client-${VERSION}-r[0-9]+" || echo "not-found")
             if [ "$ALPINE_PKG" == "not-found" ]; then
                 echo "Warning: Alpine edge repository does not have the snapcast-client package for version ${VERSION} yet."
                 echo "Waiting for Alpine maintainers to publish it. Stopping gracefully."
