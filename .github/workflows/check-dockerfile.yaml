@@ -23,4 +23,4 @@ jobs:
           tags: sirtoby42/snapclient:latest
           context: "{{defaultContext}}:snapclient"
           build-args: |
-            BUILD_FROM=ghcr.io/hassio-addons/base:latest
+            BUILD_FROM=ghcr.io/hassio-addons/base:stable

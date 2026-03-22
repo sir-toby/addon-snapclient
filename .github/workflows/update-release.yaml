@@ -93,5 +93,5 @@ jobs:
             sirtoby42/snapclient:${{ steps.get_version.outputs.version }}
           context: "{{defaultContext}}:snapclient"
           build-args: |
-            BUILD_FROM=ghcr.io/hassio-addons/base:latest
+            BUILD_FROM=ghcr.io/hassio-addons/base:stable
             SNAPCAST_VERSION=${{ steps.get_version.outputs.version }}
