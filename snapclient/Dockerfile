@@ -12,7 +12,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN \
     apk add --no-cache \
     alsa-plugins-pulse bash \
-    --repository=https://dl-cdn.alpinelinux.org/package/edge/community/ "snapcast-client~=${SNAPCAST_VERSION}" \
+    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community/ "snapcast-client~=${SNAPCAST_VERSION}" \
     && rm -fr \
     /tmp/*
 

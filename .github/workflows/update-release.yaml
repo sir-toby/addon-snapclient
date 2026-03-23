@@ -43,7 +43,7 @@ jobs:
             echo "Latest release found: $VERSION"
           fi
 
-      - name: Check if version already published
+      - name: Check if version already published and package is ready
         id: check_published
         run: |
           VERSION="${{ steps.get_version.outputs.version }}"
@@ -52,17 +52,17 @@ jobs:
             echo "exists=true" >> $GITHUB_OUTPUT
             echo "Version $VERSION already exists on Docker Hub. Stopping."
           else
-            echo "exists=false" >> $GITHUB_OUTPUT
-            echo "Version $VERSION not found."
+            echo "Version $VERSION not found on Docker Hub."
             
-            # Additional pre-check to gracefully exit if Alpine Edge doesn't have the version yet
-            ALPINE_PKG=$(curl -s "https://dl-cdn.alpinelinux.org/alpine/edge/community/armv7/" | grep -oE "snapcast-client-${VERSION}-r[0-9]+" || echo "not-found")
-            if [ "$ALPINE_PKG" == "not-found" ]; then
+            # Spin up a quick robust check against the Alpine package mirror directly via Docker
+            echo "Simulating apk update to check if version $VERSION is available in Alpine Edge yet..."
+            if docker run --rm ghcr.io/hassio-addons/base:stable bash -c "apk add --no-cache --simulate --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community/ snapcast-client~=$VERSION"; then
+                echo "Alpine edge has the package! Proceeding with update."
+                echo "exists=false" >> $GITHUB_OUTPUT
+            else
                 echo "Warning: Alpine edge repository does not have the snapcast-client package for version ${VERSION} yet."
                 echo "Waiting for Alpine maintainers to publish it. Stopping gracefully."
                 echo "exists=true" >> $GITHUB_OUTPUT
-            else
-                echo "Alpine edge has the package! Proceeding with update."
             fi
           fi
 
