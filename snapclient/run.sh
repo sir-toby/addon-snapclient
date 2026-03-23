@@ -2,4 +2,4 @@
 
 echo "Starting snapclient..."
 
-snapclient -h $(bashio::config 'host') -p $(bashio::config 'port') --hostID $(bashio::config 'clientname')
+snapclient --hostID $(bashio::config 'clientname') tcp://$(bashio::config 'host'):$(bashio::config 'port')
