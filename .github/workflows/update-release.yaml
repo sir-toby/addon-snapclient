@@ -80,12 +80,19 @@ jobs:
           # Prepend the new release information right under the #Changelog header
           sed -i "s/^#Changelog/#Changelog\n\n##${VERSION}\n- Upgrade version/" CHANGELOG.md
 
+      - name: Update Dockerfile ARG
+        if: steps.check_published.outputs.exists == 'false'
+        run: |
+          VERSION="${{ steps.get_version.outputs.version }}"
+          # Hardcode the version directly in the Dockerfile so local builds work
+          sed -i "s/^ARG SNAPCAST_VERSION=.*/ARG SNAPCAST_VERSION=$VERSION/" snapclient/Dockerfile
+
       - name: Commit and push changes
         if: steps.check_published.outputs.exists == 'false'
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Bump add-on version to ${{ steps.get_version.outputs.version }}"
-          file_pattern: "snapclient/config.yaml CHANGELOG.md"
+          file_pattern: "snapclient/config.yaml CHANGELOG.md snapclient/Dockerfile"
 
       - name: Set up QEMU
         if: steps.check_published.outputs.exists == 'false'
