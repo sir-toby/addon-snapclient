@@ -39,6 +39,9 @@
 ##0.35.0
 - Upgrade version
 
+##0.35.0
+- Upgrade version
+
 ##2026.03.22
 - Upgrade version
 - Add Github Action to automatically check for latest version, build new image and push it to dockerhub
