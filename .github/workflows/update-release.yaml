@@ -2,11 +2,11 @@ name: Check and Build New Snapcast Release
 
 on:
   schedule:
-    - cron: '0 0 * * *' # Check daily at midnight
+    - cron: "0 0 * * *" # Check daily at midnight
   workflow_dispatch: # Allow manual triggering
     inputs:
       version:
-        description: 'Specific Snapcast version to build (e.g. 0.28.0). Leave empty to automatically fetch latest.'
+        description: "Specific Snapcast version to build (e.g. 0.28.0). Leave empty to automatically fetch latest."
         required: false
         type: string
 
@@ -23,7 +23,7 @@ jobs:
         id: get_version
         run: |
           MANUAL_VERSION="${{ github.event.inputs.version }}"
-          
+
           if [ -n "$MANUAL_VERSION" ]; then
             # Use the manually provided version, stripping 'v' if accidentally included
             VERSION=${MANUAL_VERSION#v}
@@ -47,13 +47,15 @@ jobs:
         id: check_published
         run: |
           VERSION="${{ steps.get_version.outputs.version }}"
-          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "https://hub.docker.com/v2/repositories/sirtoby42/snapclient/tags/$VERSION/")
-          if [ "$HTTP_STATUS" == "200" ]; then
+          # Read current version from config.yaml
+          CURRENT_VERSION=$(grep "^version:" snapclient/config.yaml | sed 's/version: //')
+
+          if [ "$VERSION" == "$CURRENT_VERSION" ]; then
             echo "exists=true" >> $GITHUB_OUTPUT
-            echo "Version $VERSION already exists on Docker Hub. Stopping."
+            echo "Version $VERSION already in config.yaml. Stopping."
           else
             echo "exists=false" >> $GITHUB_OUTPUT
-            echo "Version $VERSION not found."
+            echo "Version $VERSION not published yet, proceeding with update."
             
             # Additional pre-check to gracefully exit if Alpine Edge doesn't have the version yet
             ALPINE_PKG=$(curl -s "https://dl-cdn.alpinelinux.org/alpine/edge/community/armv7/" | grep -oE "snapcast-client-${VERSION}-r[0-9]+" || echo "not-found")
@@ -121,4 +123,4 @@ jobs:
           build-args: |
             BUILD_FROM=ghcr.io/hassio-addons/base:stable
             SNAPCAST_VERSION=${{ steps.get_version.outputs.version }}
-          platforms: linux/arm/v7
+          platforms: linux/arm/v7,linux/amd64,linux/arm64
